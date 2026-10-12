@@ -1,0 +1,10 @@
+/* Periodic layout algorithms: distances include neighbours across tile edges. */
+(function(root){
+  function random(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  const wrap=(x,m)=>(x%m+m)%m;
+  function delta(a,b,period){return wrap(a-b+period/2,period)-period/2}
+  function distance(a,b,w,h){return Math.hypot(delta(a.x,b.x,w),delta(a.y,b.y,h))}
+  function balanced(count,w,h,seed,relax=false){const rnd=random(seed),points=[];for(let i=0;i<count;i++){let best,score=-1;for(let k=0;k<40;k++){const p={x:rnd()*w,y:rnd()*h};let d=Infinity;for(const q of points)d=Math.min(d,distance(p,q,w,h));if(d>score){best=p;score=d}}points.push(best)}if(relax){const cell=Math.sqrt(w*h/count);for(let pass=0;pass<35;pass++){const forces=points.map(()=>({x:0,y:0}));for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){let dx=delta(points[i].x,points[j].x,w),dy=delta(points[i].y,points[j].y,h),d=Math.hypot(dx,dy);if(d<cell&&d>1e-6){const force=(cell-d)*.085;forces[i].x+=dx/d*force;forces[i].y+=dy/d*force;forces[j].x-=dx/d*force;forces[j].y-=dy/d*force}}points.forEach((p,i)=>{p.x=wrap(p.x+forces[i].x,w);p.y=wrap(p.y+forces[i].y,h)})}}return points}
+  function lattice(cols,rows,w,h,type,seed,jitter){const rnd=random(seed),cw=w/cols,ch=h/rows,out=[];for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){let px=(x+.5)*cw,py=(y+.5)*ch;if(['brick','hex'].includes(type))px+=(y%2)*cw/2;if(type==='column')py+=(x%2)*ch/2;if(type==='diagonal')px+=y*cw/rows;if(type==='diamond'){px+=(y%2)*cw/2;py+=((x+y)%2)*ch*.18}if(type==='scatter'){px=rnd()*w;py=rnd()*h}else if(type==='organic'){px+=(rnd()-.5)*cw*jitter/100;py+=(rnd()-.5)*ch*jitter/100}else if(type!=='hex'){px+=(rnd()-.5)*cw*jitter/100;py+=(rnd()-.5)*ch*jitter/100}out.push({x:wrap(px,w),y:wrap(py,h)})}return out}
+  const api={random,wrap,delta,distance,balanced,lattice};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.RepeatLayout=api;
+})(globalThis);
