@@ -17,8 +17,8 @@ using Microsoft.Web.WebView2.WinForms;
 [assembly: AssemblyProduct("Jago Repeat Studio")]
 [assembly: AssemblyCompany("Cameron Jago Lis Illustrates")]
 [assembly: AssemblyCopyright("Copyright (c) 2026 Cameron Jago Lis Illustrates")]
-[assembly: AssemblyVersion("1.12.0.0")]
-[assembly: AssemblyFileVersion("1.12.0.0")]
+[assembly: AssemblyVersion("1.13.0.0")]
+[assembly: AssemblyFileVersion("1.13.0.0")]
 static class Program
 {
     internal static string Root, Files, Test;

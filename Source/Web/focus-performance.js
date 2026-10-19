@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 (()=>{
 // One cached geometric arrangement. Asset references stay live for animation frames.
-const oldSmart=smartPlacements;let cacheKey='',cache=null,hits=0,misses=0;
-smartPlacements=function(){const ids=['mode','tw','th','layout','cols','rows','seed','jitter','mix','size','gapx','gapy','sizeJitter','rotation','rotJitter','avoidOverlap','clearance','independentSeeds','mixSeed','sizeSeed','angleSeed'];const key=JSON.stringify([ids.map(k=>$(k).type==='checkbox'?$(k).checked:$(k).value),assets.map(a=>[renderSourceId(a),a.enabled,a.w,a.h,a.scale,a.rotate,a.flip,a.opacity,a.posX,a.posY,a.repeatCount,a.repeatStyle,a.visibleBox]),manualItems]);if(key!==cacheKey){cacheKey=key;cache=oldSmart();misses++}else hits++;return cache.map(p=>({...p}))};
+const oldSmart=smartPlacements;let cacheKey='',cache=null,hits=0,misses=0,sourceRefs=[];
+smartPlacements=function(){if(sourceRefs.length!==assets.length||assets.some((a,i)=>a!==sourceRefs[i])){sourceRefs=assets.slice();cacheKey='';spacingCache.key='';}const ids=['mode','tw','th','layout','cols','rows','seed','jitter','mix','size','gapx','gapy','sizeJitter','rotation','rotJitter','avoidOverlap','clearance','independentSeeds','mixSeed','sizeSeed','angleSeed'];const key=JSON.stringify([ids.map(k=>$(k).type==='checkbox'?$(k).checked:$(k).value),assets.map(a=>[renderSourceId(a),a.enabled,a.w,a.h,a.scale,a.rotate,a.flip,a.opacity,a.posX,a.posY,a.repeatCount,a.repeatStyle,a.visibleBox]),manualItems]);if(key!==cacheKey){cacheKey=key;cache=oldSmart();misses++}else hits++;return cache.map(p=>({...p}))};
 // Count painting so navigation tests can verify reused repeat samples.
 let paints=0;const oldPaint=paintLogicalTile;paintLogicalTile=function(...args){paints++;return oldPaint(...args)};
 window.JagoRepeatPerformance={get arrangementHits(){return hits},get arrangementMisses(){return misses},get logicalPaints(){return paints}};
