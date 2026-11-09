@@ -11,3 +11,11 @@ Keep licence notices with redistributed code and binaries.
 Run `node --test Source/Tests/focus.test.cjs`. With Playwright and Edge available, run `node Source/Tests/refresher-browser.cjs`. That test also expects the Wobble, Material and World repositories beside this one, with their generated index pages, for real adapter checks. `REPEAT_TEST_OUTPUT` chooses an evidence directory; all browser profiles are isolated.
 
 For Windows, copy `Source/Native-probes/refresher.js` to `probe.js` in a new test directory. Set `JAGO_SUITE_ROOT` to a private test location and launch the built app with `--suite-test` and that directory. Never use a real project profile for testing.
+
+## Canvas authoring checks
+
+With Playwright and Edge available, run node Source/Tests/canvas-authoring.cjs. REPEAT_TEST_OUTPUT selects an isolated evidence folder. Source/Native-probes/canvas-authoring.js extends the existing isolated native probe with grouped duplication, Undo and save/reopen checks.
+
+## Group motion checks
+
+Run node --test Source/Tests/group-motion.test.cjs. With Playwright/Edge available, run Source/Tests/motion-browser.cjs and Source/Tests/export-checks.cjs with node. REPEAT_TEST_OUTPUT chooses an isolated evidence folder. Source/Native-probes/group-motion.js extends the native isolated probe. Media checks exercise actual PNG/GIF/video exports; browser codecs remain environment-dependent.

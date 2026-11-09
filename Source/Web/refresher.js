@@ -19,9 +19,8 @@ toolbar.append(explore,motifs,check);document.querySelector('.workspace-bar').af
 const bench=$('variationBench'),slot=document.createElement('span');bench.before(slot);
 const quick=$('quickVariations');
 const family=document.createElement('label');family.textContent='Pattern family';family.innerHTML+='<select id="repeatExploreFamily"><option value="any">Any family</option><option value="ordered">Ordered repeats</option><option value="flowing">Flowing arrangements</option><option value="graphic">Graphic geometry</option></select>';
-bench.querySelector('label').before(family);
-const related=document.createElement('button');related.textContent='Variations of this layout…';related.onclick=()=>JagoRepeatVariations.compare(true).catch(e=>toast(e.message));
-$('compareVariations').textContent='Generate six comparisons…';$('compareVariations').after(related);quick.textContent='Surprise me';
+bench.querySelector('details').before(family);
+$('compareVariations').textContent='Compare broader layouts…';
 const bankList=document.createElement('div');bankList.className='repeat-direction-bank';
 let exploreDialog=null;
 function renderBank(){bankList.replaceChildren();const list=directions();if(!list.length){bankList.textContent='Keep a direction from a comparison to find it here. Save your project to include its directions.';return;}
@@ -35,7 +34,7 @@ function renderBank(){bankList.replaceChildren();const list=directions();if(!lis
 explore.onclick=()=>{
  if(exportBusy)return toast('Wait for export to finish.');if(exploreDialog?.open)return;
  const dlg=document.createElement('dialog');exploreDialog=dlg;dlg.className='repeat-refresh-dialog';
- dlg.innerHTML='<button class="close-dialog" aria-label="Close pattern exploration">×</button><h2>Explore your pattern</h2><p>Generate repeats a seed. Surprise me chooses a fresh seed. Variations stays close to your current layout. Applying replaces its arrangement; your sources stay and Undo restores it.</p><h3>Saved directions in this project</h3>';
+ dlg.innerHTML='<button class="close-dialog" aria-label="Close pattern exploration">×</button><h2>Explore your pattern</h2><p>Try variations to stay close to your current layout. Compare broader layouts to explore a larger change. Open Repeat these variations to enter a known seed. Applying replaces its arrangement; your sources stay and Undo restores it.</p><h3>Saved directions in this project</h3>';
  bench.open=true;dlg.querySelector('h3').before(bench,quick);dlg.append(bankList);renderBank();document.body.append(dlg);
  const close=()=>{slot.after(quick,bench);bench.open=false;dlg.close();dlg.remove();exploreDialog=null;};dlg.querySelector('button').onclick=close;dlg.oncancel=e=>{e.preventDefault();close();};dlg.showModal();
 };
